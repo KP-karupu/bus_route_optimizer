@@ -2,86 +2,50 @@
 <html>
 <head>
     <title>Chennai Bus Route Optimizer</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #2193b0, #6dd5ed);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: Arial;
+            background: #f4f4f4;
             margin: 0;
+            padding: 20px;
         }
 
         .container {
+            max-width: 600px;
+            margin: auto;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 420px;
-            box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
         }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        label {
-            font-weight: bold;
-            margin-top: 12px;
-            display: block;
-        }
-
-        select {
+        select, button {
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 14px;
+            margin-top: 10px;
+            border-radius: 6px;
         }
 
         button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 10px;
-            background: #2193b0;
+            background: #0077b6;
             color: white;
-            font-size: 16px;
+            border: none;
             cursor: pointer;
-            transition: 0.3s;
         }
 
-        button:hover {
-            background: #176d85;
-        }
-
-        .result {
+        #map {
+            height: 400px;
             margin-top: 20px;
-            padding: 15px;
-            background: #f1f9ff;
             border-radius: 10px;
-        }
-
-        .result h3 {
-            margin-bottom: 10px;
-            color: #333;
         }
 
         .time {
+            color: red;
             font-weight: bold;
-            color: #d62828;
-            font-size: 18px;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 15px;
-            color: gray;
         }
     </style>
 </head>
@@ -92,10 +56,8 @@
     <h2>🚌 Chennai Bus Route Optimizer</h2>
 
     <form method="POST">
-
-        <label>Source</label>
         <select name="source" required>
-            <option value="">Select Location</option>
+            <option value="">Select Source</option>
             <option>Tambaram</option>
             <option>Guindy</option>
             <option>Velachery</option>
@@ -104,9 +66,8 @@
             <option>Anna Nagar</option>
         </select>
 
-        <label>Destination</label>
         <select name="destination" required>
-            <option value="">Select Location</option>
+            <option value="">Select Destination</option>
             <option>Tambaram</option>
             <option>Guindy</option>
             <option>Velachery</option>
@@ -115,7 +76,6 @@
             <option>Anna Nagar</option>
         </select>
 
-        <label>Traffic Level</label>
         <select name="traffic">
             <option value="normal">Normal Traffic</option>
             <option value="moderate">Moderate Traffic</option>
@@ -126,19 +86,42 @@
     </form>
 
     {% if result %}
-    <div class="result">
-        <h3>🚏 Best Route</h3>
+        <h3>Best Route:</h3>
         <p>{{ result.path }}</p>
-        <p>Total Travel Time: 
-            <span class="time">{{ result.time }} minutes</span>
-        </p>
-    </div>
-    {% endif %}
+        <p>Total Time: <span class="time">{{ result.time }} minutes</span></p>
 
-    <div class="footer">
-        Real-time traffic adjusted prototype
-    </div>
+        <div id="map"></div>
+    {% endif %}
 </div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+{% if result %}
+<script>
+    var coordinates = {{ coordinates|tojson }};
+    var route = "{{ result.path }}".split(" → ");
+
+    var map = L.map('map').setView([13.04, 80.23], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var latlngs = [];
+
+    route.forEach(function(city) {
+        var lat = coordinates[city][0];
+        var lng = coordinates[city][1];
+        latlngs.push([lat, lng]);
+
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup(city);
+    });
+
+    L.polyline(latlngs, {color: 'blue'}).addTo(map);
+</script>
+{% endif %}
 
 </body>
 </html>

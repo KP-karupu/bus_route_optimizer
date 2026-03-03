@@ -99,31 +99,29 @@
 
 {% if result %}
 <script>
-    var coordinates = {{ coordinates | tojson }};
-    var route = "{{ result.path }}".split(" → ");
+    var apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjNkYzFlNGU3NTM1YzRmNTViMTUxOGFhNjdkODRjODBmIiwiaCI6Im11cm11cjY0In0=";
 
-    var map = L.map('map').setView([13.04, 80.23], 11);
+var start = coordinates[route[0]];
+var end = coordinates[route[route.length - 1]];
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start[1]},${start[0]}&end=${end[1]},${end[0]}`)
+.then(response => response.json())
+.then(data => {
 
-    var latlngs = [];
+    var coords = data.features[0].geometry.coordinates;
 
-    route.forEach(function(city) {
-        var lat = coordinates[city][0];
-        var lng = coordinates[city][1];
-        latlngs.push([lat, lng]);
-
-        L.marker([lat, lng]).addTo(map)
-            .bindPopup(city);
+    var latlngs = coords.map(function(coord) {
+        return [coord[1], coord[0]];
     });
 
-    L.polyline(latlngs, {color: 'blue'}).addTo(map);
+    L.polyline(latlngs, {color: 'blue', weight: 5}).addTo(map);
+
+});
 </script>
 {% endif %}
 
 </body>
 </html>
+
 
 

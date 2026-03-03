@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bus Route Optimizer</title>
+</head>
+<body>
+    <h2>Bus Route Optimizer Prototype</h2>
+
+    <form method="POST">
+        <label>Source:</label>
+        <select name="source">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+        </select>
+
+        <br><br>
+
+        <label>Destination:</label>
+        <select name="destination">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+        </select>
+
+        <br><br>
+
+        <label>Traffic Level:</label>
+        <select name="traffic">
+            <option value="normal">Normal</option>
+            <option value="moderate">Moderate</option>
+            <option value="heavy">Heavy</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Find Route</button>
+    </form>
+
+    {% if result %}
+        <h3>Best Route:</h3>
+        <p>{{ result.path }}</p>
+        <p>Total Travel Time: {{ result.time }} minutes</p>
+    {% endif %}
+</body>
+</html>

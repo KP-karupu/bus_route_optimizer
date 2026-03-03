@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bus Route Optimizer</title>
+    <title>Chennai Bus Route Optimizer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,9 +16,9 @@
         .container {
             background: white;
             padding: 30px;
-            border-radius: 12px;
-            width: 400px;
-            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            border-radius: 15px;
+            width: 420px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
         }
 
         h2 {
@@ -29,25 +29,26 @@
 
         label {
             font-weight: bold;
+            margin-top: 12px;
             display: block;
-            margin-top: 10px;
         }
 
         select {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin-top: 5px;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid #ccc;
+            font-size: 14px;
         }
 
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 20px;
             border: none;
-            border-radius: 8px;
-            background: #4facfe;
+            border-radius: 10px;
+            background: #2193b0;
             color: white;
             font-size: 16px;
             cursor: pointer;
@@ -55,24 +56,32 @@
         }
 
         button:hover {
-            background: #00c6ff;
+            background: #176d85;
         }
 
         .result {
             margin-top: 20px;
             padding: 15px;
-            background: #f0f8ff;
-            border-radius: 8px;
+            background: #f1f9ff;
+            border-radius: 10px;
         }
 
         .result h3 {
-            margin: 0 0 10px 0;
+            margin-bottom: 10px;
             color: #333;
         }
 
         .time {
             font-weight: bold;
-            color: #e63946;
+            color: #d62828;
+            font-size: 18px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
+            color: gray;
         }
     </style>
 </head>
@@ -80,37 +89,37 @@
 <body>
 
 <div class="container">
-    <h2>🚌 Bus Route Optimizer</h2>
+    <h2>🚌 Chennai Bus Route Optimizer</h2>
 
     <form method="POST">
 
         <label>Source</label>
         <select name="source" required>
-            <option value="">Select Source</option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
+            <option value="">Select Location</option>
+            <option>Tambaram</option>
+            <option>Guindy</option>
+            <option>Velachery</option>
+            <option>T Nagar</option>
+            <option>Adyar</option>
+            <option>Anna Nagar</option>
         </select>
 
         <label>Destination</label>
         <select name="destination" required>
-            <option value="">Select Destination</option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
+            <option value="">Select Location</option>
+            <option>Tambaram</option>
+            <option>Guindy</option>
+            <option>Velachery</option>
+            <option>T Nagar</option>
+            <option>Adyar</option>
+            <option>Anna Nagar</option>
         </select>
 
         <label>Traffic Level</label>
         <select name="traffic">
-            <option value="normal">Normal</option>
-            <option value="moderate">Moderate</option>
-            <option value="heavy">Heavy</option>
+            <option value="normal">Normal Traffic</option>
+            <option value="moderate">Moderate Traffic</option>
+            <option value="heavy">Heavy Traffic</option>
         </select>
 
         <button type="submit">Find Best Route</button>
@@ -125,6 +134,10 @@
         </p>
     </div>
     {% endif %}
+
+    <div class="footer">
+        Real-time traffic adjusted prototype
+    </div>
 </div>
 
 </body>

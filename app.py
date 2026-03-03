@@ -8,12 +8,12 @@ app = Flask(__name__)
 # Graph: Node -> Connected Node -> Time (in minutes)
 
 graph = {
-    "A": {"B": 10, "C": 15},
-    "B": {"A": 10, "D": 12, "E": 15},
-    "C": {"A": 15, "F": 10},
-    "D": {"B": 12, "E": 2},
-    "E": {"B": 15, "D": 2, "F": 5},
-    "F": {"C": 10, "E": 5}
+    "Tambaram": {"Guindy": 25, "Velachery": 30},
+    "Guindy": {"Tambaram": 25, "T Nagar": 15, "Velachery": 20},
+    "Velachery": {"Tambaram": 30, "Guindy": 20, "Adyar": 15},
+    "T Nagar": {"Guindy": 15, "Anna Nagar": 25},
+    "Adyar": {"Velachery": 15, "Anna Nagar": 30},
+    "Anna Nagar": {"T Nagar": 25, "Adyar": 30}
 }
 
 # -----------------------------
@@ -80,4 +80,5 @@ def index():
     return render_template("index.html", result=result)
 
 if __name__ == "__main__":
+
     app.run(host="0.0.0.0", port=5000)

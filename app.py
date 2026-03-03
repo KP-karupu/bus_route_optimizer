@@ -7,13 +7,13 @@ app = Flask(__name__)
 # -----------------------------
 # Graph: Node -> Connected Node -> Time (in minutes)
 
-graph = {
-    "Tambaram": {"Guindy": 25, "Velachery": 30},
-    "Guindy": {"Tambaram": 25, "T Nagar": 15, "Velachery": 20},
-    "Velachery": {"Tambaram": 30, "Guindy": 20, "Adyar": 15},
-    "T Nagar": {"Guindy": 15, "Anna Nagar": 25},
-    "Adyar": {"Velachery": 15, "Anna Nagar": 30},
-    "Anna Nagar": {"T Nagar": 25, "Adyar": 30}
+coordinates = {
+    "Tambaram": (12.9249, 80.1000),
+    "Guindy": (13.0067, 80.2206),
+    "Velachery": (12.9815, 80.2180),
+    "T Nagar": (13.0418, 80.2337),
+    "Adyar": (13.0012, 80.2565),
+    "Anna Nagar": (13.0850, 80.2101)
 }
 
 # -----------------------------
@@ -82,3 +82,4 @@ def index():
 if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=5000)
+

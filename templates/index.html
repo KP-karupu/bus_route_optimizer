@@ -8,19 +8,23 @@
 
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             background: #f4f4f4;
             margin: 0;
             padding: 20px;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 15px;
         }
 
         select, button {
@@ -28,24 +32,30 @@
             padding: 10px;
             margin-top: 10px;
             border-radius: 6px;
+            border: 1px solid #ccc;
         }
 
         button {
             background: #0077b6;
             color: white;
             border: none;
+            font-weight: bold;
             cursor: pointer;
+        }
+
+        button:hover {
+            background: #005f8e;
+        }
+
+        .time {
+            color: red;
+            font-weight: bold;
         }
 
         #map {
             height: 400px;
             margin-top: 20px;
             border-radius: 10px;
-        }
-
-        .time {
-            color: red;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -89,39 +99,48 @@
         <h3>Best Route:</h3>
         <p>{{ result.path }}</p>
         <p>Total Time: <span class="time">{{ result.time }} minutes</span></p>
-
-        <div id="map"></div>
     {% endif %}
+
+    <!-- MAP ALWAYS VISIBLE -->
+    <div id="map"></div>
 </div>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-{% if result %}
 <script>
-    var apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjNkYzFlNGU3NTM1YzRmNTViMTUxOGFhNjdkODRjODBmIiwiaCI6Im11cm11cjY0In0=";
+    // Get coordinates from Flask
+    var coordinates = {{ coordinates | tojson }};
 
-var start = coordinates[route[0]];
-var end = coordinates[route[route.length - 1]];
+    // Initialize map
+    var map = L.map('map').setView([13.04, 80.23], 11);
 
-fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start[1]},${start[0]}&end=${end[1]},${end[0]}`)
-.then(response => response.json())
-.then(data => {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-    var coords = data.features[0].geometry.coordinates;
+    {% if result %}
+        var route = "{{ result.path }}".split(" → ");
+        var latlngs = [];
 
-    var latlngs = coords.map(function(coord) {
-        return [coord[1], coord[0]];
-    });
+        route.forEach(function(city) {
+            if (coordinates[city]) {
+                latlngs.push(coordinates[city]);
+                L.marker(coordinates[city]).addTo(map)
+                    .bindPopup(city);
+            }
+        });
 
-    L.polyline(latlngs, {color: 'blue', weight: 5}).addTo(map);
+        if (latlngs.length > 1) {
+            L.polyline(latlngs, {
+                color: 'blue',
+                weight: 5
+            }).addTo(map);
 
-});
+            map.fitBounds(latlngs);
+        }
+    {% endif %}
 </script>
-{% endif %}
 
 </body>
 </html>
-
-
-

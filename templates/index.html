@@ -2,13 +2,91 @@
 <html>
 <head>
     <title>Bus Route Optimizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background: #4facfe;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00c6ff;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+        }
+
+        .result h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .time {
+            font-weight: bold;
+            color: #e63946;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>Bus Route Optimizer Prototype</h2>
+
+<div class="container">
+    <h2>🚌 Bus Route Optimizer</h2>
 
     <form method="POST">
-        <label>Source:</label>
-        <select name="source">
+
+        <label>Source</label>
+        <select name="source" required>
+            <option value="">Select Source</option>
             <option>A</option>
             <option>B</option>
             <option>C</option>
@@ -17,10 +95,9 @@
             <option>F</option>
         </select>
 
-        <br><br>
-
-        <label>Destination:</label>
-        <select name="destination">
+        <label>Destination</label>
+        <select name="destination" required>
+            <option value="">Select Destination</option>
             <option>A</option>
             <option>B</option>
             <option>C</option>
@@ -29,24 +106,26 @@
             <option>F</option>
         </select>
 
-        <br><br>
-
-        <label>Traffic Level:</label>
+        <label>Traffic Level</label>
         <select name="traffic">
             <option value="normal">Normal</option>
             <option value="moderate">Moderate</option>
             <option value="heavy">Heavy</option>
         </select>
 
-        <br><br>
-
-        <button type="submit">Find Route</button>
+        <button type="submit">Find Best Route</button>
     </form>
 
     {% if result %}
-        <h3>Best Route:</h3>
+    <div class="result">
+        <h3>🚏 Best Route</h3>
         <p>{{ result.path }}</p>
-        <p>Total Travel Time: {{ result.time }} minutes</p>
+        <p>Total Travel Time: 
+            <span class="time">{{ result.time }} minutes</span>
+        </p>
+    </div>
     {% endif %}
+</div>
+
 </body>
 </html>

@@ -109,38 +109,46 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-    // Get coordinates from Flask
-    var coordinates = {{ coordinates | tojson }};
+var coordinates = {{ coordinates | tojson }};
 
-    // Initialize map
-    var map = L.map('map').setView([13.04, 80.23], 11);
+var map = L.map('map').setView([13.04, 80.23], 11);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-    {% if result %}
-        var route = "{{ result.path }}".split(" → ");
-        var latlngs = [];
+{% if result %}
+    var route = "{{ result.path }}".split(" → ");
 
-        route.forEach(function(city) {
-            if (coordinates[city]) {
-                latlngs.push(coordinates[city]);
-                L.marker(coordinates[city]).addTo(map)
-                    .bindPopup(city);
-            }
+    var start = coordinates[route[0]];
+    var end = coordinates[route[route.length - 1]];
+
+    // ADD YOUR API KEY HERE
+    var apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjNkYzFlNGU3NTM1YzRmNTViMTUxOGFhNjdkODRjODBmIiwiaCI6Im11cm11cjY0In0=";
+
+    fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start[1]},${start[0]}&end=${end[1]},${end[0]}`)
+    .then(response => response.json())
+    .then(data => {
+
+        var coords = data.features[0].geometry.coordinates;
+
+        var latlngs = coords.map(function(coord) {
+            return [coord[1], coord[0]];
         });
 
-        if (latlngs.length > 1) {
-            L.polyline(latlngs, {
-                color: 'blue',
-                weight: 5
-            }).addTo(map);
+        L.polyline(latlngs, {
+            color: 'blue',
+            weight: 5
+        }).addTo(map);
 
-            map.fitBounds(latlngs);
-        }
-    {% endif %}
+        L.marker(start).addTo(map).bindPopup(route[0]);
+        L.marker(end).addTo(map).bindPopup(route[route.length - 1]);
+
+        map.fitBounds(latlngs);
+    });
+{% endif %}
 </script>
 
 </body>
 </html>
+
